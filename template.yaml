@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  AWS
+
+  Sample SAM Template for AWS
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 300
+    MemorySize: 256
+
+Parameters:
+  SlackBotToken:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+  SlackBotChannel:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+
+Resources:
+  SlackSampleFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: SlackSampleFunction
+      Handler: handler.App::handleRequest
+      Runtime: java8
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          SLACK_BOT_TOKEN: !Ref SlackBotToken
+          SLACK_BOT_CHANNEL: !Ref SlackBotChannel
+      Events:
+        SlackSample:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /hello
+            Method: get
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  SlackSampleApi:
+    Description: "API Gateway endpoint URL for Prod stage for Slack Sample function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  SlackSampleFunction:
+    Description: "Slack Sample Lambda Function ARN"
+    Value: !GetAtt SlackSampleFunction.Arn
+  SlackSampleFunctionIamRole:
+    Description: "Implicit IAM Role created for Slack Sample function"
+    Value: !GetAtt SlackSampleFunctionRole.Arn

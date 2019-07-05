@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.0'
+    testImplementation 'junit:junit:4.12'
+    
+    // slack
+    implementation 'com.github.Ullink:simple-slack-api:1.2.0'
+
+    // logging
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+
+    // slack
+    implementation 'com.github.Ullink:simple-slack-api:1.2.0'
+
+    // assertion
+    testImplementation 'org.assertj:assertj-core:3.11.1'
+    testImplementation 'com.jayway.jsonpath:json-path-assert:2.4.0'
+
+    // mock
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.0'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.0'
+}
